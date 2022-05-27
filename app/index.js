@@ -34,12 +34,12 @@ const readDir = async () => {
     withFileTypes: true
   });
 
-  for await (let item of items) {
+  for (let item of items) {
     await countPages(path.join(filesPath, item.name), item.name, index).then(async () => {
-      await appendNewTable();
       index++;
     });
   }
+
 };
 
 const countPages = async (filePath, fileName, i) => {
@@ -52,9 +52,10 @@ const countPages = async (filePath, fileName, i) => {
           <td>${fileName}</td>
           <td>${numPages}</td>
       </tr>
-    `
-    console.log(fileName);
-    console.log(numPages);
+    `;
+  }).then(async () => {
+    await appendNewTable();
+    console.log(table);
   })
 
 }
