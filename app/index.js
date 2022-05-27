@@ -29,24 +29,26 @@ const removeDist = async (path) => {
 }
 
 const readDir = async () => {
-
+  let index = 1;
   const items = await fs.promises.readdir(filesPath, {
     withFileTypes: true
   });
 
   for await (let item of items) {
-    await countPages(path.join(filesPath, item.name), item.name).then(async () => {
+    await countPages(path.join(filesPath, item.name), item.name, index).then(async () => {
       await appendNewTable();
+      index++;
     });
   }
 };
 
-const countPages = async (filePath, fileName) => {
+const countPages = async (filePath, fileName, i) => {
   const pdf = pdfjsLib.getDocument(filePath);
   pdf.promise.then(function (doc) {
     const numPages = doc.numPages;
     table += `
-      <tr>  
+      <tr>
+          <td>${i}</td>
           <td>${fileName}</td>
           <td>${numPages}</td>
       </tr>
